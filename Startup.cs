@@ -1,20 +1,19 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using TodoApi.Models;
 using Microsoft.OpenApi.Models;
 using TodoApiDTO.Extensions;
 using System.IO;
+using Business_Layer.Services;
+using Business_Layer.Interfaces;
+using DataAccessLayer.Repositories;
+using DataAccessLayer.Interfaces;
+using DataAccessLayer.EF;
 
 namespace TodoApi
 {
@@ -32,6 +31,8 @@ namespace TodoApi
         {
             string connection = Configuration.GetConnectionString("TodoContextConnection");
             services.AddDbContext<TodoContext>(options => options.UseSqlServer(connection));
+            services.AddScoped<ITodoRepository, TodoRepository>();
+            services.AddScoped<ITodoServices, TodoServices>();
 
             services.AddControllers();
 
